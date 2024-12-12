@@ -1,0 +1,86 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body{
+	line-height: 1.5;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	overflow-x: hidden;
+}
+*{
+	margin:0;
+	box-sizing: border-box;
+}
+
+:before,:after{
+	box-sizing: border-box;
+}
+
+
+.btn:hover {
+  border:none;
+  color:#cccc !important;
+}
+
+.border{
+ border:1px solid red; 
+}
+
+.d-flex{
+	display:flex;
+	align-items:center;
+	justify-content: center;
+}
+
+a{
+ text-decoration:none;
+ color:#0D2D6D;
+}
+
+
+/* Styles pour DataTables */
+#csv_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#csv_table th,
+#csv_table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#csv_table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+#csv_table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dataTables_paginate {
+    margin-top: 10px;
+}
+
+.dataTables_length {
+    margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

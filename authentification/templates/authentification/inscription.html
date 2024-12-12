@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% for message in messages %}
+
+        <h3 style="color: green; text-align: center;">{{ message }}</h3>
+
+{% endfor %}
+
+<div class="container mt-5" style="display:flex;align-items:center;justify-content:center;">
+
+    <div class="col-md-4 mb-4" style="padding:20px;box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+
+        <h2 class="text-center mb-4" style="padding:10px;background-color:#0D2D6D;color:#ffff;">Opendatastream</h2>
+
+        <h4 class="text-center mb-4">S'inscrire</h4>
+
+        <p class="text-center mb-4">Inscrivez-vous à votre compte Opendatastream<p>
+
+        <form method="post" action="{% url 'inscription' %}" enctype="multipart/form-data" style="width:100%;">
+         
+            {% csrf_token %}
+        
+            {{ form.as_p }}
+        
+         <button type="submit" class="btn btn-primary mt-4" 
+         
+          style="width:100%;background-color:#0D2D6D;color:#ffff;border:none;padding:10px;">S'inscrire</button>
+        
+         <p class="mt-4">Vous avez déjà un compte ? <a href="{% url 'connexion' %}">Connexion</a></p>
+
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

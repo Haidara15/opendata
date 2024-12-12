@@ -1,0 +1,19 @@
+<!-- delete_sous_thematique.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer une sous-thématique</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Supprimer une sous-thématique</h1>
+        <p>Êtes-vous sûr de vouloir supprimer la sous-thématique "{{ sous_thematique.titre }}" ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Oui, supprimer</button>
+            <a href="{% url 'accueil' %}" class="btn btn-secondary">Annuler</a> <!-- Remplacez par votre URL d'annulation -->
+        </form>
+    </div>
+</body>
+</html>

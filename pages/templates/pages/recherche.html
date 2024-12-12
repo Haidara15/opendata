@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <p class="mb-4">Retrouvez ici une sélection de jeux de données de votre recherche {{query_normalized}} :</p>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for value_selected in thematiques_filtred %}
+            <a href="{% url 'page_detail' slug=value_selected.slug %}" style="text-decoration:none;color:black;">
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top" src="{{ value_selected.image.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ value_selected.titre }}</h5>
+                        <p class="card-text">{{ value_selected.description }}</p>
+                        <span style="font-size:30px;position:absolute; bottom:5px; right:5px;">&#8594;</span>
+                    </div>
+                </div>
+            </div>
+            </a>
+            {% endfor %}
+        </div>
+</div>
+
+{% endblock content %}

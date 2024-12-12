@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <!-- Bouton Ajouter une Actualité -->
+    {% if user.is_authenticated and user.is_staff %}
+    <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+        <a href="{% url 'ajouter_actualite' %}" style="display: flex; align-items: center; text-decoration: none;">
+            <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
+            <span style="margin-left: 8px;">Ajouter une actualité</span>
+        </a>
+    </div>
+    {% endif %}
+
+    <h2 class="mt-4 mb-4">Actualités</h2>
+
+    <div class="row g-4"> 
+        {% for item in actualites %}
+        <div class="box col-md-4">
+            <a href="{% url 'page_detail' slug=item.slug %}" style="text-decoration:none;color:black;" class="card h-100">
+                <img class="card-img-top" src="{% if item.image and item.image.url %}{{ item.image.url }}{% else %}https://via.placeholder.com/240x180.jpg{% endif %}" width="200" loading="lazy" alt="{{ item.titre }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.titre }}</h5>
+                    <p class="card-text">{{ item.description|truncatechars:100 }}</p>
+                </div>
+            </a>
+            {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'modifier_actualite' slug=item.slug %}" class="btn btn-primary btn-sm">Modifier</a>
+            <a href="{% url 'supprimer_actualite' slug=item.slug %}" class="btn btn-danger btn-sm">Supprimer</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

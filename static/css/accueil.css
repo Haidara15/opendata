@@ -1,0 +1,29 @@
+
+
+.container-home {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box {
+    background-color: #ffffff;
+    width:100%;
+    color: white;
+    flex: 1 1 calc(25% - 16px); /* 3 boîtes par ligne - 16px à cause du gap */
+    box-sizing: border-box;
+    max-width: calc(25% - 16px); /* Limite la largeur de la boîte */
+}
+
+@media (max-width: 992px) {
+    .box {
+        flex: 1 1 calc(50% - 16px); /* 2 boîtes par ligne pour les écrans moyens */
+        max-width: calc(50% - 16px); /* Limite la largeur de la boîte */
+    }
+}
+
+@media (max-width: 600px) {
+    .box {
+        flex: 1 1 100%; /* 1 boîte par ligne pour les petits écrans */
+        max-width: 100%; /* Limite la largeur de la boîte */
+    }
+}
