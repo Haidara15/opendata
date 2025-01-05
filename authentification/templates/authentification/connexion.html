@@ -4,13 +4,6 @@
 
 {% block content %} 
 
-<!-- {% for message in messages %}
-
-   <h5 class="mt-5" style="color: green; text-align: center;">{{ message }}</h5>
-
-{% endfor %}
- -->
- 
 <div class="container mt-5" style="display:flex;align-items:center;justify-content:center;">
 
     <div class="col-md-4 mt-5 mb-4" style="padding:20px;box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
@@ -41,26 +34,19 @@
                   <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
                 </div>
 
-                <!-- <button type="submit" style="margin-bottom:2%;color:#ffff;text-align:center;text-decoration:none;width:100%;border:none;background-color:#fff;">
-                  <a href="#">Mot de passe oublié ?</a>
-                </button> -->
-
-                <a href="#" class="mt-4">Mot de passe oublié ?</a>
+                <a href="{% url 'password_reset' %}" class="mt-4">Mot de passe oublié ?</a>
 
                 <button type="submit" class="btn btn-primary mt-4" 
                 
                 style="width:100%;background-color:#0D2D6D;color:#ffff;border:none;padding:10px;">Connexion</button> 
 
                 <p class="mt-4">Vous n'avez pas de compte ? <a href="{% url 'inscription' %}">Inscription</a></p>
-
-
              
               </form>
-            
-              
     </div>
   
 </div>
 
 {% endblock content %} 
+
 

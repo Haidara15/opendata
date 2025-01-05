@@ -1,0 +1,16 @@
+{% autoescape off %}
+Bonjour {{ user.username }},
+
+<p>Pour confirmer votre adresse email, veuillez cliquer sur le lien suivant :</p>
+
+<a href="{{ protocol }}://{{ domain }}{% url 'verification_email' uidb64=uidb64 token=token %}">
+
+    Cliquez ici pour valider votre email
+</a>
+
+<p>
+    Merci,
+    Votre équipe Opendatastream
+</p>
+
+{% endautoescape %}
