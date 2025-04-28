@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+
+
+
 from pathlib import Path
 
 import os
@@ -41,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pages',
     'authentification',
+    'actualite',
+    'contact',
 ]
 
 MIDDLEWARE = [
@@ -77,12 +82,28 @@ WSGI_APPLICATION = 'opendata.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+""" from decouple import config
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', cast=int, default=5432),
+    }
+} """
+
 
 
 # Password validation
@@ -128,22 +149,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static',]
 
 
 
-
-
-
-
-
-""" MEDIA_URL = '/media/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')] """
-
-
-
-
 from decouple import config
 
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
@@ -152,6 +157,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_PORT = config('EMAIL_PORT', cast=int, default=587)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+
+
+EMAIL_RECIPIENTS = ['missiliou.haidara@gmail.com', 'cherifsidy1502@gmail.com']
+
 
 
 

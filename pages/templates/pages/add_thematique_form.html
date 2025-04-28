@@ -1,0 +1,18 @@
+<form id="addThematiqueForm" method="post" action="{% url 'add_thematique' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="{{ form.titre.id_for_label }}" class="form-label">Titre</label>
+        {{ form.titre }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+        {{ form.description }}
+    </div>
+    <div class="mb-3">
+        <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+        {{ form.image }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Ajouter</button>
+</form>

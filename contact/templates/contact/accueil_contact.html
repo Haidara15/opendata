@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container contact-container" style="margin-top:5%;">
+    <div class="row justify-content-center">
+        <!-- Section gauche -->
+        <div class="col-md-6 contact-left">
+            <h2>Opendatastream</h2>
+            <p>N'hésitez pas à nous écrire si vous avez des questions ou des besoins spécifiques.</p>
+            <p>Nous sommes là pour vous aider à chaque étape.</p>
+        </div>
+        <!-- Section droite -->
+        <div class="col-md-6 contact-right">
+            <h2>Contactez-nous</h2>
+            <form method="post" class="contact-form">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nom" class="form-label">Nom *</label>
+                    {{ form.nom }}
+                </div>
+                <div class="mb-3">
+                    <label for="prenom" class="form-label">Prénom *</label>
+                    {{ form.prenom }}
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email *</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="objet" class="form-label">Objet</label>
+                    {{ form.objet }}
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Message</label>
+                    {{ form.description }}
+                </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-submit">Envoyer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block script_extrat %}
+<style>
+    
+    .contact-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        padding: 20px 30px;
+        max-width: 1100px;
+        margin: 50px auto;
+        
+    }
+
+    .contact-left {
+        background: #0D2D6D;
+        color: white;
+        border-radius: 10px 0 0 10px;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        
+    }
+
+    .contact-left h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .contact-left p {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .contact-right {
+        padding: 40px 30px;
+        
+    }
+
+    .contact-right h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #0D2D6D;
+    }
+
+    .contact-form .mb-3 {
+        margin-bottom: 20px;
+    }
+
+    .contact-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #0D2D6D;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .contact-form textarea {
+        resize: none;
+        height: 100px;
+    }
+
+    .btn-submit {
+        background: #0D2D6D;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn-submit:hover {
+        background: #0a285c;
+    }
+
+    
+
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .contact-container {
+            flex-direction: column;
+            border-radius: 10px;
+        }
+
+        .contact-left,
+        .contact-right {
+            width: 100%;
+            flex: none;
+            padding:0;
+        }
+
+        .contact-left {
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .contact-right {
+            border-radius: 0 0 10px 10px;
+            padding: 0; /* Suppression des marges internes pour ajuster la largeur */
+        }
+
+        
+    }
+</style>
+
+{% endblock script_extrat %}

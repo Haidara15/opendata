@@ -1,93 +1,240 @@
-
 {% extends "base.html" %}
 
 {% load static %}
 
-{% block content %} 
-
+{% block content %}
 
 <div class="container mt-5 mb-4 container-home">
+    <h1 class="mb-4 text-center">La Plateforme ouverte des données publiques</h1>
+    <p class="mb-4 text-center">Retrouvez ici une sélection de jeux de données clés regroupés par sujet :</p>
 
-    <h1 class="mb-4">La Plateforme ouverte des données publiques</h1> 
+    {% if user.is_authenticated and user.is_staff %}
+    <div class="d-flex align-items-end justify-content-end mb-3" style="width:100%;">
 
-    <p class="mb-4">Retrouvez ici une sélection de jeux de données clés regroupés par sujet : </p>
+        <!-- <a href="{% url 'add_thematique' %}" class="btn btn-success d-flex align-items-end justify-content-end">
+            <ion-icon name="add-outline" class="me-2" style="font-size: 24px;"></ion-icon>
+            <span>Ajouter une thématique</span>
+        </a> -->
 
-   <!--  {% if user.is_authenticated %}
-
-    <a href="{% url 'add_thematique' %}" style="margin-left:20px; display: flex; align-items: center;">
-
-        <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
-
-        <span>Ajouter une thématique</span>
-
-    </a>
-
-    <a href="#" style="display: flex; align-items: center;">
-
-        <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
-
-        <span>Ajouter une sous-thématique</span>
-
-    </a>
-
-    {% endif %} -->
-
-
-
-    <div class="row g-4">
-
-        {% if user.is_authenticated and user.is_staff %}
-          
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <a href="{% url 'add_thematique' %}" style="display: flex; align-items: center; text-decoration: none;">
-                <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
-                <span style="margin-left: 8px;">Ajouter une thématique</span>
-            </a>
-            
-            <a href="{% url 'add_sous_thematique' %}" style="display: flex; align-items: center; text-decoration: none;">
-                <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
-                <span style="margin-left: 8px;">Ajouter une sous-thématique</span>
-            </a>
-        </div>
+        <button class="btn btn-success d-flex align-items-end justify-content-end" data-bs-toggle="modal" data-bs-target="#addModal">
+            <ion-icon name="add-outline" class="me-2" style="font-size: 24px;"></ion-icon>
+            <span>Ajouter une thématique</span>
+        </button>
         
-
-        {% endif %}
-
-
-     {% for thematique in thematiques %}
-
-        <div class="box">
-
-            <a href="{% url 'page_detail' slug=thematique.slug %}" style="text-decoration:none;color:black;" class="card h-100">
-
-                <img class="card-img-top" src="{% if thematique.image and thematique.image.url %}{{ thematique.image.url }}{% else %}https://via.placeholder.com/240x180.jpg{% endif %}" 
-                
-                width="240" height="180" loading="lazy" alt="Card image cap">
-
-                <div class="card-body d-flex flex-column align-items-start">
-                    <h5 class="card-title text-start">{{ thematique.titre }}</h5>
-                    <p class="card-text">{{ thematique.description|truncatechars:100 }}</p>
-                    <span style="font-size:30px;align-self: end;">&#8594;</span>
-                </div>
-            </a>
-            {% if user.is_authenticated and user.is_staff %}
-            <div class="d-flex justify-content-start">
-                <a href="{% url 'update_thematique' slug=thematique.slug %}" class="btn btn-primary btn-sm me-2">Modifier</a>
-                <a href="{% url 'delete_thematique' slug=thematique.slug %}" class="btn btn-danger btn-sm">Supprimer</a>
-            </div>
-            {% endif %}
-        </div>
-        {% endfor %}
 
     </div>
-    
+    {% endif %}
 
-    
-     
-        
-        
-        
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+        {% for thematique in thematiques %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header">
+                    <h5 class="m-0">{{ thematique.titre }}</h5>
+                </div>
+                <a href="{% url 'page_detail' slug=thematique.slug %}" class="text-decoration-none text-dark">
+                    <img class="card-img-top"
+                        src="{% if thematique.image and thematique.image.url %}{{ thematique.image.url }}{% else %}https://placehold.co/600x400/png{% endif %}"
+                        width="240" height="180" loading="lazy" alt="Image de la thématique">
+                    <div class="card-body d-flex flex-column flex-grow-1">
+                        <p class="card-text flex-grow-1">{{ thematique.description|truncatechars:100 }}</p>
+                        <div class="mt-auto d-flex justify-content-end w-100">
+                            <span style="font-size: 30px;">&#8594;</span>
+                        </div>
+                    </div>
+                </a>
+                {% if user.is_authenticated and user.is_staff %}
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <button class="edit-thematique" data-slug="{{ thematique.slug }}" data-bs-toggle="modal" data-bs-target="#editModal">
+                        <ion-icon name="create-outline" style="font-size: 20px; color: blue;"></ion-icon>
+                    </button>
+                    <button class="border-0  delete-thematique" data-url="{% url 'delete_thematique' slug=thematique.slug %}" data-bs-toggle="modal" data-bs-target="#modal">
+                        <ion-icon name="trash-outline" style="font-size: 20px; color: red;"></ion-icon>
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 
+
+<!-- Modal d'ajout -->
+<div id="addModal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter une Thématique</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addThematiqueForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="titre" class="form-label">Titre</label>
+                        <input type="text" class="form-control" id="titre" name="titre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="image" name="image">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Ajouter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal de suppression -->
+<div id="modal" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer cette thématique ? Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmDelete" class="btn btn-danger">Supprimer</button>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de modification -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier la Thématique</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalFormContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block script_extrat %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+$(document).ready(function () {
+    $(".edit-thematique").click(function () {
+        var slug = $(this).data("slug");
+        $.ajax({
+            url: "/update/" + slug + "/",
+            type: "GET",
+            success: function (data) {
+                $("#modalFormContent").html(data);
+            },
+            error: function () {
+                $("#modalFormContent").html("<p>Erreur lors du chargement du formulaire.</p>");
+            }
+        });
+    });
+
+    $(document).on("submit", "#editForm", function (event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        $.ajax({
+            url: $(this).attr("action"),
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    $("#editModal").modal("hide");
+                    setTimeout(function () { location.reload(); }, 500);
+                }
+            },
+            error: function () {
+                alert("Erreur lors de la mise à jour.");
+            }
+        });
+    });
+
+    $(".delete-thematique").click(function () {
+        var url = $(this).data("url");
+        $("#confirmDelete").off("click").on("click", function () {
+            $.ajax({
+                url: url,
+                type: "POST",
+                headers: { 'X-CSRFToken': getCSRFToken() },
+                success: function () {
+                    $("#modal").modal("hide");
+                    setTimeout(function () { location.reload(); }, 500);
+                },
+                error: function () {
+                    alert("Erreur lors de la suppression.");
+                }
+            });
+        });
+    });
+
+    function getCSRFToken() {
+        return document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
+    }
+});
+</script>
+
+<!--Ajouter une thématique -->
+
+<script>
+    $(document).ready(function () {
+        $("#addThematiqueForm").submit(function (event) {
+            event.preventDefault();  // Empêche le rechargement de la page
+            var formData = new FormData(this);
+            
+            $.ajax({
+                url: "{% url 'add_thematique' %}",  // URL de la vue
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.success) {
+                        $("#addModal").modal("hide");
+                        setTimeout(function () { location.reload(); }, 500);
+                    } else {
+                        alert("Erreur lors de l'ajout de la thématique.");
+                    }
+                },
+                error: function () {
+                    alert("Une erreur est survenue.");
+                }
+            });
+        });
+    });
+    </script>
+    
+
+{% endblock script_extrat %}
+
+
+
+
+
+
+
+
+
+
+

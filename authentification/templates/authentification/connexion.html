@@ -1,52 +1,173 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
-{% block content %} 
+{% block content %}
 
-<div class="container mt-5" style="display:flex;align-items:center;justify-content:center;">
+<div class="container mt-5 mb-5 d-flex align-items-center justify-content-center">
+    <div class="box-wrapper p-0">
+        <!-- Bloc formulaire -->
+        <div class="shadow rounded bg-white p-4">
+            <!-- Bande "Opendatastream" -->
+            <div class="text-center mx-auto w-100 py-3 mb-3" 
+                style="background-color: #0D2D6D; color: white; max-width: 100%; padding: 15px 10px;">
+                <h2 class="m-0" style="font-size: 20px;">Opendatastream</h2>
+            </div>
 
-    <div class="col-md-4 mt-5 mb-4" style="padding:20px;box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <h4 class="text-center mb-4">Se connecter</h4>
+            <p class="text-center mb-4">Connectez-vous à votre compte <strong>Opendatastream</strong></p>
 
-      {% for message in messages %}
-
-      <div class="alert alert-primary text-center" role="alert"><strong>{{ message }}</strong></div>
-
-      {% endfor %}
-
-      <h2 class="text-center mb-4" style="padding:10px;background-color:#0D2D6D;color:#ffff;">Opendatastream</h2>
-
-      <h4 class="text-center mb-4">Se connecter</h4>
-
-      <p class="text-center mb-4">Connectez-vous à votre compte Opendatastream</p>
-
-            <form method="post"  enctype="multipart/form-data" style="width:100%;">
-
+            <!-- Formulaire -->
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 <div class="form-group mb-4">
-                  <!-- <label>Nom d'utilisateur</label> -->
-                  <input type="text" name="username" class="form-control" placeholder="Email">
+                    <input type="text" name="username" class="form-control" placeholder="Email">
                 </div>
 
-                <div class="form-group mb-4">
-                  <!-- <label>Mot de passe</label> -->
-                  <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <div class="form-group mb-4 position-relative">
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe">
+                    <span class="toggle-password" onclick="togglePassword()">
+                        <ion-icon id="eye-icon" name="eye-off-outline"></ion-icon>
+                    </span>
                 </div>
 
-                <a href="{% url 'password_reset' %}" class="mt-4">Mot de passe oublié ?</a>
+                <a href="{% url 'password_reset' %}" class="mt-4 d-block text-end">Mot de passe oublié ?</a>
 
-                <button type="submit" class="btn btn-primary mt-4" 
-                
-                style="width:100%;background-color:#0D2D6D;color:#ffff;border:none;padding:10px;">Connexion</button> 
+                <button type="submit" class="btn btn-primary mt-4 w-100"
+                    style="background-color: #0D2D6D; color: #fff; border: none; padding: 10px;">
+                    Connexion
+                </button>
+            </form>
 
-                <p class="mt-4">Vous n'avez pas de compte ? <a href="{% url 'inscription' %}">Inscription</a></p>
-             
-              </form>
+            <!-- Séparateur -->
+            <div class="separator my-4">
+                <hr class="line">
+                <span class="text">Ou</span>
+                <hr class="line">
+            </div>
+
+            <!-- Boutons de connexion via réseaux sociaux -->
+            <div class="text-center my-4">
+                <div class="d-flex flex-column gap-3">
+                    <a href="#" class="btn social-btn facebook-btn" style="border: 1px solid #3b5998; background: transparent; color: #3b5998; border-radius: 0;">
+                        <i class="fab fa-facebook-f"></i>Facebook
+                    </a>
+                    <a href="#" class="btn social-btn linkedin-btn" style="border: 1px solid #0077b5; background: transparent; color: #0077b5; border-radius: 0;">
+                        <i class="fab fa-linkedin-in"></i>LinkedIn
+                    </a>
+                    <a href="#" class="btn social-btn google-btn" style="border: 1px solid #db4437; background: transparent; color: #db4437; border-radius: 0;">
+                        <i class="fab fa-google"></i>Google
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ligne séparatrice avant l'inscription -->
+            <hr class="line mb-4" style="height: 2px; background-color: #bbb;">
+
+            <!-- Lien d'inscription -->
+            <p class="text-center">Vous n'avez pas de compte ? <a href="{% url 'inscription' %}">Inscription</a></p>
+        </div>
     </div>
-  
 </div>
 
-{% endblock content %} 
+{% endblock content %}
 
+{% block script_extrat %}
+
+
+<script>
+    function togglePassword() {
+        let passwordField = document.getElementById("password");
+        let eyeIcon = document.getElementById("eye-icon");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.setAttribute("name", "eye-outline");
+        } else {
+            passwordField.type = "password";
+            eyeIcon.setAttribute("name", "eye-off-outline");
+        }
+    }
+</script>
+
+
+
+<style>
+    .position-relative {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .toggle-password ion-icon {
+        font-size: 22px;
+        color: #666;
+    }
+</style>
+
+
+
+<style>
+    /* Separator */
+    .separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .separator .line {
+        flex-grow: 1;
+        height: 2px;
+        background-color: #bbb;
+        margin: 0 10px;
+    }
+
+    .separator .text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Box wrapper */
+    .box-wrapper {
+        max-width: 450px;
+        width: 90%;
+    }
+
+    /* Boutons sociaux */
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .social-btn i {
+        margin-right: 10px;
+        font-size: 18px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .box-wrapper {
+            width: 85%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .box-wrapper {
+            width: 95%;
+        }
+    }
+</style>
+{% endblock script_extrat %}
 

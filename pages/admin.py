@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Thematiques, SousThematique, Comment, Actualite
+from .models import Thematiques, SousThematique, Comment
 
 # Register your models here.
 
@@ -29,11 +29,6 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(Comment, CommentAdmin)
 
 
-class ActualiteAdmin(admin.ModelAdmin):
-    
-    list_display = [field.name for field in Actualite._meta.fields]
-
-admin.site.register(Actualite, ActualiteAdmin)
 
 
 

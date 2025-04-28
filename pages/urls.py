@@ -18,6 +18,9 @@ urlpatterns = [
     path('thematiques/<slug:slug>/', views.thematique_detail, name='page_detail'),
 
     path('sous-thematiques/<slug:slug>/', views.sous_thematique_detail, name='sous_thematique_detail'),
+
+    path('thematiques/<slug:thematique_slug>/sous-thematiques/<slug:slug>/', views.sous_thematique_detail, name='sous_thematique_detail'),
+ 
     path('recherche/', views.recherche, name='recherche'),
     path('tables/', views.tables, name='tables'),
     path('filter_sous_thematiques/', views.filter_sous_thematiques, name='filter_sous_thematiques'),
@@ -28,12 +31,9 @@ urlpatterns = [
     path('sous-thematique/<int:sous_thematique_id>/download-xlsx/', views.download_xlsx, name='download_xlsx'),
     path('sous-thematique/<int:sous_thematique_id>/download-json/', views.download_json, name='download_json'),
 
-    #### Actualité #### 
+   
 
-    path('actualite/', views.actualite, name='actualite'),
-    path('actualite/ajouter/', views.ajouter_actualite, name='ajouter_actualite'),
-    path('actualite/modifier/<slug:slug>/', views.modifier_actualite, name='modifier_actualite'),
-    path('actualite/supprimer/<slug:slug>/', views.supprimer_actualite, name='supprimer_actualite'),
+    
 ]
 
 

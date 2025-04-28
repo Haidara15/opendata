@@ -1,7 +1,4 @@
 
-<!--Template : pages/tables.html -->
-
-
 {% extends 'base.html' %}
 
 {% block content %}
@@ -9,10 +6,23 @@
 
 <div class="container mt-5" style="border: 1px solid transparent;">
 
+    
+    {% if user.is_authenticated and user.is_staff %}
+
+    <div style="display: flex; align-items: center; gap: 20px;justify-content:end;">
+        <a href="{% url 'add_sous_thematique' %}"
+            style="display: flex; align-items: center; text-decoration: none;">
+            <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
+            <span style="margin-left: 8px;">Ajouter une sous-thématique</span>
+        </a>
+    </div>
+
+    {% endif %}
+
     <div class="row">
         <ul style="list-style:none;padding:0;">
             <li><h2>Jeux de données</h2></li>
-            <li><p>Rechercher parmi les {{ tables|length }} jeux de données sur <strong>opendatastream</strong></p></li>
+            <li><p>Rechercher parmi les ..... jeux de données sur <strong>opendatastream</strong></p></li>
         </ul>
     </div>
 

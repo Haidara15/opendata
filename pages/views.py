@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .models import Thematiques, SousThematique, Comment, Actualite
+from .models import Thematiques, SousThematique, Comment
 
 from django.shortcuts import render, get_object_or_404, redirect  
 
@@ -23,46 +23,7 @@ import csv
 
 import openpyxl
 
-
-################ Utilités ############################
-
-
-""" def filter_sous_thematiques_util(request):
-
-    thematiques_selectionnees = request.GET.getlist('selected_thematiques')
-
-    periodicites_selectionnees = request.GET.getlist('selected_periodicities')
-
-    terme_recherche = request.GET.get('search')
-
-    sous_thematiques = SousThematique.objects.all()
-
-    if thematiques_selectionnees:
-        thematiques_selectionnees_decodees = [urllib.parse.unquote_plus(thematique) for thematique in thematiques_selectionnees]
-        sous_thematiques = sous_thematiques.filter(thematique_parente__titre__in=thematiques_selectionnees_decodees)
-
-    if periodicites_selectionnees:
-        periodicites_selectionnees_decodees = [urllib.parse.unquote_plus(periodicite) for periodicite in periodicites_selectionnees]
-        sous_thematiques = sous_thematiques.filter(periodicite__in=periodicites_selectionnees_decodees)
-
-    if terme_recherche:
-
-        terme_recherche = urllib.parse.unquote(terme_recherche)
-
-        print("Le terme récherché est :",terme_recherche)
-
-        sous_thematiques = sous_thematiques.filter(
-
-            Q(titre__icontains=terme_recherche) |
-            
-            Q(description_sous_thematique__icontains=terme_recherche) |
-
-            Q(thematique_parente__titre__icontains=terme_recherche) | 
-
-            Q(periodicite__icontains=terme_recherche) 
-        )
-		
-    return sous_thematiques	 """
+from django.contrib import messages
 
 
 
@@ -81,19 +42,49 @@ def page_accueil(request):
 
 ####### CRUD thématique ########### 
 
+from django.contrib import messages
+
+""" def add_thematique(request):
+    if request.method == 'POST':
+        form = ThematiquesForm(request.POST, request.FILES)
+        if form.is_valid():
+            thematique = form.save()  # Sauvegarde la thématique
+            # Utilisation de la balise <strong> pour le nom de la thématique
+            messages.success(request, f"Vous avez ajouté <strong>{thematique.titre}</strong> avec succès !")
+            return redirect('accueil')  
+    else:
+        form = ThematiquesForm()
+    return render(request, 'pages/add_thematique.html', {'form': form}) """
+
+
+from django.http import JsonResponse
+
 def add_thematique(request):
     if request.method == 'POST':
         form = ThematiquesForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            thematique = form.save()
+            messages.success(request, f"Vous avez ajouté <strong>{thematique.titre}</strong> avec succès !")
+            
+            # Vérifier si la requête est AJAX
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({"success": True})
+
             return redirect('accueil')  
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({"success": False, "errors": form.errors})
+
     else:
         form = ThematiquesForm()
+    
     return render(request, 'pages/add_thematique.html', {'form': form})
 
 
 
-def update_thematique(request, slug):
+
+
+""" def update_thematique(request, slug):
     thematique = get_object_or_404(Thematiques, slug=slug)
     if request.method == 'POST':
         form = ThematiquesForm(request.POST, request.FILES, instance=thematique)
@@ -102,15 +93,71 @@ def update_thematique(request, slug):
             return redirect('accueil')  
     else:
         form = ThematiquesForm(instance=thematique)
-    return render(request, 'pages/update_thematique.html', {'form': form, 'thematique': thematique})
+    return render(request, 'pages/update_thematique.html', {'form': form, 'thematique': thematique}) """
 
 
-def delete_thematique(request, slug):
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse
+from django.template.loader import render_to_string  # Assurez-vous que ceci est ajouté
+from .models import Thematiques
+from .forms import ThematiquesForm
+
+
+
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from .models import Thematiques
+from .forms import ThematiquesForm
+
+def update_thematique(request, slug):
+    thematique = get_object_or_404(Thematiques, slug=slug)
+
+    if request.method == "POST":
+        form = ThematiquesForm(request.POST, request.FILES, instance=thematique)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({"success": True})  # AJAX attend cette réponse
+
+    else:
+        form = ThematiquesForm(instance=thematique)
+
+    # Si c'est une requête AJAX, on envoie uniquement le formulaire
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'pages/form_update.html', {'form': form, 'thematique': thematique})
+
+    return render(request, 'pages/form_update.html', {'form': form, 'thematique': thematique})
+
+
+
+
+
+
+""" def delete_thematique(request, slug):
     thematique = get_object_or_404(Thematiques, slug=slug)
     if request.method == 'POST':
         thematique.delete()
         return redirect('accueil')  
-    return render(request, 'pages/delete_thematique.html', {'thematique': thematique})
+    return render(request, 'pages/delete_thematique.html', {'thematique': thematique}) """
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.views.decorators.csrf import csrf_exempt
+from pages.models import Thematiques  # Assure-toi que le modèle est bien importé
+
+
+@csrf_exempt  # Temporairement, si le CSRF pose problème en AJAX
+def delete_thematique(request, slug):
+    thematique = get_object_or_404(Thematiques, slug=slug)
+    if request.method == 'POST':
+        try:
+            thematique.delete()
+            messages.success(request, f"Vous avez supprimé <strong>{thematique.titre}</strong> avec succès !")
+            return JsonResponse({'success': True})  # On renvoie un JSON
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Requête invalide'}, status=400)
+
+
 
 
 def recherche(request):
@@ -134,37 +181,6 @@ def recherche(request):
 
 
 ############ Partie sous-thématiques #################################
-
-""" def thematique_detail(request,slug):
-
-    thematiques = get_object_or_404(Thematiques,slug=slug)
-
-    sous_thematiques = SousThematique.objects.filter(thematique_parente=thematiques)
-
-    titres_uniques = sous_thematiques.values_list('titre', flat=True).distinct()
-
-    titres_uniques = set(titres_uniques)  
-
-
-    periodicites_uniques = sous_thematiques.values_list('periodicite', flat=True).distinct()
-
-    periodicites_uniques = set(periodicites_uniques) 
-    
-
-    context = {'thematiques': thematiques,
-               
-               "sous_thematiques":sous_thematiques,
-
-                "titres_uniques":titres_uniques,
-
-                "periodicites_uniques":periodicites_uniques
-     } 
-
-    return render(request, 'pages/thematique_detail.html',context=context) """
-
-
-
-
 
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
@@ -280,23 +296,11 @@ def filter_sous_thematiques(request):
 
 def tables(request):
 
-    #selected_thematiques = request.GET.getlist('selected_thematiques')
-
-    #selected_periodicities = request.GET.getlist('selected_periodicities')
-
-    #search_term = request.GET.get('search')
-
     valeurs_uniques_themes = Thematiques.objects.values_list('titre', flat=True).distinct()
 
     valeurs_uniques_periodicite = SousThematique.objects.values_list('periodicite', flat=True).distinct().order_by('-periodicite')
 
     context = {
-
-        #"selected_thematiques": selected_thematiques,
-
-        #"selected_periodicities": selected_periodicities,
-
-        #"search_term": search_term,
 
         "valeurs_uniques_themes": valeurs_uniques_themes,
 
@@ -312,7 +316,8 @@ def tables(request):
 
 ################## Page détail de sous-thématique ################
 
-def sous_thematique_detail(request, slug):
+def sous_thematique_detail(request,slug):
+
     sous_thematique = get_object_or_404(SousThematique, slug=slug)
 
     # Vérifier si la sous-thématique a un fichier CSV associé
@@ -354,11 +359,6 @@ def sous_thematique_detail(request, slug):
 
 
 
-
-###### Partie des vues : thématiques ##################
-
-
-
 ###### Partie des vues : Sous-thématiques ########
 
 def add_sous_thematique(request):
@@ -366,7 +366,7 @@ def add_sous_thematique(request):
         form = SousThematiqueForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('accueil')  # Remplacez par votre URL de succès
+            return redirect('tables')  # Remplacez par votre URL de succès
     else:
         form = SousThematiqueForm()
     return render(request, 'pages/add_sous_thematique.html', {'form': form})
@@ -379,7 +379,7 @@ def update_sous_thematique(request, slug):
         form = SousThematiqueForm(request.POST, request.FILES, instance=sous_thematique)
         if form.is_valid():
             form.save()
-            return redirect('accueil')  # Remplacez par votre URL de succès
+            return redirect('tables')  # Remplacez par votre URL de succès
     else:
         form = SousThematiqueForm(instance=sous_thematique)
     return render(request, 'pages/update_sous_thematique.html', {'form': form,'sous_thematique':sous_thematique})
@@ -392,6 +392,7 @@ def delete_sous_thematique(request, slug):
         sous_thematique.delete()
         return redirect('accueil')  # Remplacez par votre URL de succès
     return render(request, 'pages/delete_sous_thematique.html', {'sous_thematique': sous_thematique})
+
 
 
 
@@ -485,65 +486,10 @@ def download_json(request, sous_thematique_id):
 
 
 
-############ Page actualité ##############################
-
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from .models import Actualite
-from .forms import ActualiteForm
-
-def actualite(request):
-
-    actualites = Actualite.objects.all()
-
-    context = {
-
-        "actualites":actualites
-    }
-
-    return render(request, 'pages/actualite.html',context)
 
 
 
 
-
-
-from django.shortcuts import render, redirect
-from .forms import ActualiteForm
-from .models import Actualite
-
-
-def ajouter_actualite(request):
-    if request.method == 'POST':
-        form = ActualiteForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('actualite')  # Redirection vers la liste des actualités
-    else:
-        form = ActualiteForm()
-    return render(request, 'pages/ajouter_actualite.html', {'form': form})
-
-def modifier_actualite(request, slug):
-    actualite = Actualite.objects.get(slug=slug)
-    if request.method == 'POST':
-        form = ActualiteForm(request.POST, request.FILES, instance=actualite)
-        if form.is_valid():
-            form.save()
-            return redirect('actualite')  # Redirection vers la liste des actualités
-    else:
-        form = ActualiteForm(instance=actualite)
-    return render(request, 'pages/modifier_actualite.html', {'form': form})
-
-
-
-
-def supprimer_actualite(request, slug):
-    actualite = get_object_or_404(Actualite, slug=slug)
-    if request.method == 'POST':
-        actualite.delete()
-        return redirect('actualite')
-    return render(request, 'pages/supprimer_actualite.html', {'actualite': actualite})
 
 
 

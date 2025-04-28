@@ -1,0 +1,10 @@
+
+<form id="editForm" method="POST" enctype="multipart/form-data" action="{% url 'update_thematique' slug=thematique.slug %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="modal-actions">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+    </div>
+</form>
+

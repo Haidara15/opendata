@@ -47,26 +47,28 @@ def page_connexion(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        # Vérifier si l'utilisateur existe
+
         try:
             user = User.objects.get(username=username)
             if not user.is_active:
                 messages.error(request, "Veuillez vérifier votre adresse email avant de vous connecter.")
                 return redirect('connexion')
         except User.DoesNotExist:
-            # Si l'utilisateur n'existe pas, continuer pour afficher un message générique
             pass
-        
-        # Authentifier l'utilisateur
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            messages.success(request, "Connexion réussie.")
+
+            # Ajouter le message avant la redirection
+            messages.success(request, "Vous vous êtes connecté.")
             return redirect('accueil')
         else:
-            messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
+            messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
     return render(request, 'authentification/connexion.html')
+
+
+
 
 
 

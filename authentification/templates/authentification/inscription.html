@@ -5,35 +5,186 @@
 {% block content %}
 
 {% for message in messages %}
-
-        <h3 style="color: green; text-align: center;">{{ message }}</h3>
-
+    <h3 style="color: green; text-align: center;">{{ message }}</h3>
 {% endfor %}
 
-<div class="container mt-5" style="display:flex;align-items:center;justify-content:center;">
+<div class="container mt-5 mb-5 d-flex align-items-center justify-content-center">
+    <div class="box-wrapper p-0">
+        <!-- Bloc formulaire -->
+        <div class="shadow rounded bg-white p-4">
+            <!-- Bande "Opendatastream" -->
+            <div class="text-center mx-auto w-100 py-3 mb-3" 
+                style="background-color: #0D2D6D; color: white; max-width: 100%; padding: 15px 10px;">
+                <h2 class="m-0" style="font-size: 20px;">Opendatastream</h2>
+            </div>
 
-    <div class="col-md-4 mb-4" style="padding:20px;box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
+            <h4 class="text-center mb-4">S'inscrire</h4>
+            <p class="text-center mb-4">Inscrivez-vous à votre compte <strong>Opendatastream</strong></p>
 
-        <h2 class="text-center mb-4" style="padding:10px;background-color:#0D2D6D;color:#ffff;">Opendatastream</h2>
+            <!-- Formulaire -->
+            <form method="post" action="{% url 'inscription' %}" enctype="multipart/form-data" style="width:100%;">
+                {% csrf_token %}
 
-        <h4 class="text-center mb-4">S'inscrire</h4>
+                <!-- Champ username -->
+                <div class="form-group mb-4 position-relative">
+                    {{ form.username }}
+                </div>
 
-        <p class="text-center mb-4">Inscrivez-vous à votre compte Opendatastream<p>
+                <!-- Champ email -->
+                <div class="form-group mb-4 position-relative">
+                    {{ form.email }}
+                </div>
 
-        <form method="post" action="{% url 'inscription' %}" enctype="multipart/form-data" style="width:100%;">
-         
-            {% csrf_token %}
-        
-            {{ form.as_p }}
-        
-         <button type="submit" class="btn btn-primary mt-4" 
-         
-          style="width:100%;background-color:#0D2D6D;color:#ffff;border:none;padding:10px;">S'inscrire</button>
-        
-         <p class="mt-4">Vous avez déjà un compte ? <a href="{% url 'connexion' %}">Connexion</a></p>
+                <!-- Champ mot de passe -->
+                <div class="form-group mb-4 position-relative">
+                    {{ form.password1 }}
+                    <ion-icon id="eye-icon-inscription" class="toggle-password" name="eye-off-outline" onclick="togglePassword('id_password1', 'eye-icon-inscription')"></ion-icon>
+                </div>
 
-        </form>
+                <!-- Champ confirmation mot de passe -->
+                <div class="form-group mb-4 position-relative">
+                    {{ form.password2 }}
+                    <ion-icon id="eye-icon-confirm" class="toggle-password" name="eye-off-outline" onclick="togglePassword('id_password2', 'eye-icon-confirm')"></ion-icon>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-4 w-100" 
+                    style="background-color: #0D2D6D; color: #fff; border: none; padding: 10px;">
+                    S'inscrire
+                </button>
+
+              
+            </form>
+
+            <!-- Séparateur -->
+            <div class="separator my-4">
+                <hr class="line">
+                <span class="text">Ou</span>
+                <hr class="line">
+            </div>
+
+            <!-- Boutons de connexion via réseaux sociaux -->
+            <div class="text-center my-4">
+                <div class="d-flex flex-column gap-3">
+                    <a href="#" class="btn social-btn facebook-btn" style="border: 1px solid #3b5998; background: transparent; color: #3b5998; border-radius: 0;">
+                        <i class="fab fa-facebook-f"></i>Facebook
+                    </a>
+                    <a href="#" class="btn social-btn linkedin-btn" style="border: 1px solid #0077b5; background: transparent; color: #0077b5; border-radius: 0;">
+                        <i class="fab fa-linkedin-in"></i>LinkedIn
+                    </a>
+                    <a href="#" class="btn social-btn google-btn" style="border: 1px solid #db4437; background: transparent; color: #db4437; border-radius: 0;">
+                        <i class="fab fa-google"></i>Google
+                    </a>
+                </div>
+            </div>
+
+            <!-- Ligne séparatrice avant l'inscription -->
+            <hr class="line mb-4" style="height: 2px; background-color: #bbb;">
+
+            <!-- Lien d'inscription -->
+            <p class="text-center">Vous avez déjà un compte ? <a href="{% url 'connexion' %}">Connexion</a></p>
+        </div>
     </div>
 </div>
 
 {% endblock content %}
+
+{% block script_extrat %}
+
+
+
+<script>
+    function togglePassword(passwordFieldId, eyeIconId) {
+        let passwordField = document.getElementById(passwordFieldId);
+        let eyeIcon = document.getElementById(eyeIconId);
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";  // Change en mode texte pour afficher le mot de passe
+            eyeIcon.setAttribute("name", "eye-outline");  // Change l'icône pour un œil ouvert
+        } else {
+            passwordField.type = "password";  // Retourne à "password" pour cacher le mot de passe
+            eyeIcon.setAttribute("name", "eye-off-outline");  // Change l'icône pour un œil barré
+        }
+    }
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+<style>
+    /* Separator */
+    .separator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .separator .line {
+        flex-grow: 1;
+        height: 2px;
+        background-color: #bbb;
+        margin: 0 10px;
+    }
+
+    .separator .text {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* Box wrapper */
+    .box-wrapper {
+        max-width: 450px;
+        width: 90%;
+    }
+
+    /* Boutons sociaux */
+    .social-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .social-btn i {
+        margin-right: 10px;
+        font-size: 18px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .box-wrapper {
+            width: 85%;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .box-wrapper {
+            width: 95%;
+        }
+    }
+
+    /* Style spécifique pour l'icône à l'intérieur des champs */
+    .form-group {
+        position: relative;
+    }
+
+    .form-control {
+        padding-right: 40px;  /* Donne de l'espace à droite pour l'icône */
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 10px;  /* Positionne l'icône à droite dans le champ */
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 20px;
+        color: #888;
+    }
+</style>
+
+{% endblock script_extrat %}
