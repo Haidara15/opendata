@@ -16,8 +16,6 @@ def accueil_actualite(request):
 
 
 
-
-
 def ajouter_actualite(request):
     if request.method == 'POST':
         form = ActualiteForm(request.POST, request.FILES)
