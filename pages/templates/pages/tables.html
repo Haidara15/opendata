@@ -3,6 +3,50 @@
 
 {% block content %}
 
+<style>
+    .sidebar-accordion {
+        width: 100%;
+    }
+    
+    .accordion-item {
+        width: 100%;
+        margin: 0; 
+        border : none;
+        background: #ffffff;
+        overflow: hidden;
+    }
+    
+    .accordion-header {
+        background-color: #000080;
+        color: white;
+        padding: 12px 15px; 
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.1s ease;
+    }
+    
+    .accordion-header:hover {
+        background-color: #000066;
+    }
+    
+    .accordion-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.1s ease, padding 0.2s ease;
+        background: #f9f9f9;
+        padding: 0 15px;
+    }
+    
+    .accordion-body.open {
+        max-height: 1000px;
+        padding: 10px 15px; 
+    }
+    </style>
+
 
 <div class="container mt-5" style="border: 1px solid transparent;">
 
@@ -40,41 +84,46 @@
     </div>
 
 
-
+<!---------------------------------------------------------------------------------------->
 <div class="row">
 
-        <div class="col-md-3" style="border: 1px solid #ccc;min-height:1000px;">
+    <!-- Sidebar -->
+    <div class="col-md-3 sidebar" style="border: 1px solid #ccc; padding: 0;">
+        <div class="sidebar-accordion">
 
-<!-- Thématique -->
-<label><strong>Thématiques :</strong></label>
-<div id="theme-checkboxes">
-    <!-- <label><input type="checkbox" name="thematique" value=""> Toutes les thématiques</label><br> -->
-    {% for theme in valeurs_uniques_themes %}
-        <label><input type="checkbox" name="thematique" value="{{ theme }}"> {{ theme }}</label><br>
-    {% endfor %}
-</div><br>
-
-<!-- Périodicité -->
-<label><strong>Périodicité :</strong></label>
-<div id="periodicite-checkboxes">
-    <!-- <label><input type="checkbox" name="periodicite" value=""> Toutes les périodes</label><br> -->
-    {% for periode in valeurs_uniques_periodicite %}
-        <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
-    {% endfor %}
-</div><br>
-
-
-         
-</div>
-
-     <div class="col-md-9" style="padding-right:0;">
-
-            <div id="subtheme-list" class="row">
-
+            <!-- Accordéon Thématiques -->
+            <div class="accordion-item">
+                <button class="accordion-header">Thématiques</button>
+                <div class="accordion-body">
+                    {% for theme in valeurs_uniques_themes %}
+                        <label><input type="checkbox" name="thematique" value="{{ theme }}"> {{ theme }}</label><br>
+                    {% endfor %}
+                </div>
             </div>
+
+            <!-- Accordéon Périodicité -->
+            <div class="accordion-item">
+                <button class="accordion-header">Périodicité</button>
+                <div class="accordion-body">
+                    {% for periode in valeurs_uniques_periodicite %}
+                        <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </div>
-    
+
+    <!-- Contenu principal -->
+    <div class="col-md-9" style="padding-right:0;">
+        <div id="subtheme-list" class="row">
+            <!-- Ton contenu dynamique ici -->
+        </div>
+    </div>
+
 </div>
+
+<!---------------------------------------------------------------------------------------->
 
 
 {% endblock content %}
@@ -204,5 +253,29 @@
     });
 </script>
 
+
+<!-- Accodéon sur les boutons -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        const accordionBodies = document.querySelectorAll('.accordion-body');
+    
+        // OUVRIR TOUS les accordéons au chargement
+        accordionBodies.forEach(body => {
+            body.classList.add('open');
+        });
+    
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', function () {
+                const body = this.nextElementSibling;
+    
+                // Toggle uniquement celui cliqué (ouvrir ou fermer)
+                body.classList.toggle('open');
+            });
+        });
+    });
+</script>
+    
 
 {% endblock script_extrat %}
