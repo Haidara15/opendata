@@ -37,14 +37,13 @@ h2 {
     border: 2px solid #000080;
     border-right: none;
     font-size: 1rem;
-    border-radius: 8px 0 0 8px;
+    
     outline: none;
 }
 
 .full-width-search button {
     background-color: #000080;
     border: 2px solid #000080;
-    border-radius: 0 8px 8px 0;
     color: white;
     padding: 0 20px;
     display: flex;
@@ -195,18 +194,14 @@ h2 {
 
     .full-width-search button {
         width: 100%;
-        border-radius: 0 0 8px 8px;
+        
         margin-top: 10px;
     }
 
     .full-width-search input[type="search"] {
-        border-radius: 8px 8px 0 0;
         border-right: 2px solid #000080;
     }
 
-    .col-md-9{
-        padding:0 !important;
-        margin:0 !important;
-    }
+   
 }
 
