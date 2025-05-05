@@ -1,210 +1,78 @@
 <!-- Template : pages/thematique_detail.html -->
 
 {% extends "base.html" %}
+
 {% load static %}
 
 {% block content %} 
 
 <div class="container mt-5">
 
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+
     <h1 class="mb-4">Données relatives à la thématique : {{ thematiques.titre }}</h1>
 
     <div class="row">
-        <div class="col-md-3 border">
-            <h5 class="mb-4 mt-2">Filtres:</h5>
 
-            <!-- Thématique -->
-            <label><strong>Thématiques :</strong></label>
-            <div id="theme-detail-checkboxes">
-                {% for titre in titres_uniques %}
-                    <label><input type="checkbox" name="thematique" value="{{ titre }}"> {{ titre }}</label><br>
-                {% endfor %}
-            </div><br>
+        <!-- Sidebar (Filtres) -->
+        <div class="col-md-3 sidebar" style="border: 1px solid #ccc; padding: 0;">
+            <div class="sidebar-accordion">
+                
+                <!-- Thématiques -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        Thématiques
+                        <ion-icon class="accordion-icon" name="chevron-down-outline"></ion-icon>
+                    </button>
+                    <div class="accordion-body">
+                        <div id="theme-detail-checkboxes">
+                            {% for titre in titres_uniques %}
+                                <label><input type="checkbox" name="thematique" value="{{ titre }}"> {{ titre }}</label><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Périodicité -->
-            <label><strong>Périodicité :</strong></label>
-            <div id="periodicite-detail-checkboxes">
-                {% for periode in periodicites_uniques %}
-                    <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
-                {% endfor %}
-            </div><br>
+                <!-- Périodicité -->
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        Périodicité
+                        <ion-icon class="accordion-icon" name="chevron-down-outline"></ion-icon>
+                    </button>
+                    <div class="accordion-body">
+                        <div id="periodicite-detail-checkboxes">
+                            {% for periode in periodicites_uniques %}
+                                <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
-
-
-
-       <!--  <div class="col-md-9">
-            <div class="row" id="sous-thematiques-list">
-                {% for sous_thematique in sous_thematiques %}
-                    <div class="col-sm-6 mb-4">
-                        <a href="{% url 'sous_thematique_detail' slug=sous_thematique.slug %}" style="text-decoration:none;color:black;cursor:pointer;">
-                            <div class="card" style="height:300px; box-shadow: 0 0 0 1px #ccc; box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ sous_thematique.titre }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">{{ sous_thematique.titre }}</h6>
-                                    <p class="card-text">{{ sous_thematique.description_sous_thematique|truncatechars:250 }}</p>
-                                    <div class="card-footer" style="border:none;background-color:#ffff;display:flex;align-items:center;justify-content:start;padding:0;">
-                                        <p class="card-text"> Périodicité : {{ sous_thematique.periodicite }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                        {% if user.is_authenticated and user.is_staff %}
-                            <a href="{% url 'update_sous_thematique' slug=sous_thematique.slug %}" class="btn btn-primary btn-sm me-2">Modifier</a>
-                            <a href="{% url 'delete_sous_thematique' slug=sous_thematique.slug %}" class="btn btn-danger btn-sm">Supprimer</a>
-                        {% endif %}
-                    </div>
-
-
-                {% endfor %}
+        <!-- Main Panel (Sous-thématiques) -->
+        <div class="col-md-9" style="padding-right: 0;">
+            <div id="sous-thematiques-list">
+                <!-- Résultats dynamiques affichés ici -->
             </div>
-        </div>  -->
-
-
-
-
-        <div class="col-md-9">
-
-          <div class="row" id="sous-thematiques-list">
-
-
-
-          </div>
-
-
-      </div>
-
-
-
-
-
+        </div>
 
     </div>
+
 </div>
 
 {% endblock content %}
-
-
-
 
 {% block script_extrat %} 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<script src="{% static 'js/accordion-toggle.js' %}"></script> 
 
-<script>
-  $(document).ready(function() {
-    function truncateString(str, maxLength) {
-        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
-    }
+<script>var thematiqueSlug = "{{ thematiques.slug }}";</script>
 
-    function getSelectedCheckboxValues(name) {
-        return $('input[name="' + name + '"]:checked').map(function() {
-            return $(this).val();
-        }).get();
-    }
+<script src="{% static 'js/filter_sous_thematiques.js' %}"></script> 
 
-    function updateURLParams(params) {
-        var urlParams = new URLSearchParams();
-        if (params['selected_thematiques'].length > 0) {
-            params['selected_thematiques'].forEach(function(value) {
-                urlParams.append('selected_thematiques', value);
-            });
-        }
-        if (params['selected_periodicities'].length > 0) {
-            params['selected_periodicities'].forEach(function(value) {
-                urlParams.append('selected_periodicities', value);
-            });
-        }
-
-        var newUrl = urlParams.toString() ? '/thematiques/{{ thematiques.slug }}/?' + urlParams.toString() : '/thematiques/{{ thematiques.slug }}/';
-        if (newUrl !== window.location.pathname + window.location.search) {
-            history.pushState(params, '', newUrl); // Utiliser pushState pour ajouter une nouvelle entrée à l'historique
-        }
-    }
-
-    function loadFilteredSubThemes(selectedThematiques, selectedPeriodicities) {
-        var url = '/thematiques/{{ thematiques.slug }}/';
-        var params = {};
-        if (selectedThematiques.length > 0) {
-            params['selected_thematiques'] = selectedThematiques;
-        }
-        if (selectedPeriodicities.length > 0) {
-            params['selected_periodicities'] = selectedPeriodicities;
-        }
-
-        fetch(url + '?' + $.param(params, true), {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            var subThemeList = $('#sous-thematiques-list');
-            subThemeList.empty();
-            data.sous_thematiques.forEach(function(subTheme) {
-                var truncatedDescription = truncateString(subTheme.description_sous_thematique, 300);
-                var cardHtml = `
-
-                    <a href="/sous-thematiques/${subTheme.slug}/" style="color:#000;">
-                        <div class="col-md-12"> 
-                            <div class="card" style="margin-bottom: 20px;">
-                                <div class="card-header">
-                                    ${subTheme.titre}
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">${subTheme.titre}</h5>
-                                    <p class="card-text">${truncatedDescription}</p>
-                                    <p>Périodicité: ${subTheme.periodicite}</p>
-                                </div>
-                            </div>  
-                        </div> 
-                    </a>
-                    `;
-                subThemeList.append(cardHtml);
-            });
-        });
-    }
-
-    function loadFilteredSubThemesFromUrl() {
-        var urlParams = new URLSearchParams(window.location.search);
-        var selectedThematiques = urlParams.getAll('selected_thematiques');
-        var selectedPeriodicities = urlParams.getAll('selected_periodicities');
-
-        $('input[name="thematique"]').prop('checked', false);
-        $('input[name="periodicite"]').prop('checked', false);
-
-        selectedThematiques.forEach(function(theme) {
-            $('input[name="thematique"][value="' + theme + '"]').prop('checked', true);
-        });
-        selectedPeriodicities.forEach(function(periodicity) {
-            $('input[name="periodicite"][value="' + periodicity + '"]').prop('checked', true);
-        });
-
-        loadFilteredSubThemes(selectedThematiques, selectedPeriodicities);
-    }
-
-    loadFilteredSubThemesFromUrl();
-
-    $('#theme-detail-checkboxes input[type="checkbox"], #periodicite-detail-checkboxes input[type="checkbox"]').on('change', function() {
-        var selectedThematiques = getSelectedCheckboxValues('thematique');
-        var selectedPeriodicities = getSelectedCheckboxValues('periodicite');
-
-        var params = {
-            'selected_thematiques': selectedThematiques,
-            'selected_periodicities': selectedPeriodicities
-        };
-
-        updateURLParams(params);
-        loadFilteredSubThemes(selectedThematiques, selectedPeriodicities);
-    });
-
-    window.onpopstate = function(event) {
-        loadFilteredSubThemesFromUrl();
-    };
-});
-
-</script>
 
 {% endblock script_extrat %}

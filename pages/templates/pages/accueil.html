@@ -11,16 +11,10 @@
     {% if user.is_authenticated and user.is_staff %}
     <div class="d-flex align-items-end justify-content-end mb-3" style="width:100%;">
 
-        <!-- <a href="{% url 'add_thematique' %}" class="btn btn-success d-flex align-items-end justify-content-end">
-            <ion-icon name="add-outline" class="me-2" style="font-size: 24px;"></ion-icon>
-            <span>Ajouter une thématique</span>
-        </a> -->
-
         <button class="btn btn-success d-flex align-items-end justify-content-end" data-bs-toggle="modal" data-bs-target="#addModal">
             <ion-icon name="add-outline" class="me-2" style="font-size: 24px;"></ion-icon>
             <span>Ajouter une thématique</span>
         </button>
-        
 
     </div>
     {% endif %}
@@ -225,6 +219,7 @@ $(document).ready(function () {
     });
     </script>
     
+
 
 {% endblock script_extrat %}
 
