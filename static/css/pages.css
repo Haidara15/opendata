@@ -115,7 +115,6 @@ h2 {
     font-size: 20px;
 }
 
-
 .accordion-body {
     max-height: 0;
     overflow: hidden;
@@ -123,8 +122,6 @@ h2 {
     background: #f9f9f9;
     padding: 0 15px;
 }
-
-
 
 /* Accordéon labels (checkboxes) */
 .accordion-body label {
@@ -167,15 +164,29 @@ h2 {
     color: #666;
 }
 
+
 /* 8. Responsive */
 @media (max-width: 768px) {
     .row {
         flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
     }
 
-    .sidebar, 
+    .sidebar {
+        flex: 1 1 100%;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     #subtheme-list {
         flex: 1 1 100%;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0;
+        margin-right: 0;
     }
 
     .full-width-search {
@@ -192,4 +203,10 @@ h2 {
         border-radius: 8px 8px 0 0;
         border-right: 2px solid #000080;
     }
+
+    .col-md-9{
+        padding:0 !important;
+        margin:0 !important;
+    }
 }
+
