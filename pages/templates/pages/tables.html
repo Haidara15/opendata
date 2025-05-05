@@ -1,130 +1,99 @@
-
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<style>
-    .sidebar-accordion {
-        width: 100%;
-    }
-    
-    .accordion-item {
-        width: 100%;
-        margin: 0; 
-        border : none;
-        background: #ffffff;
-        overflow: hidden;
-    }
-    
-    .accordion-header {
-        background-color: #000080;
-        color: white;
-        padding: 12px 15px; 
-        width: 100%;
-        text-align: left;
-        border: none;
-        outline: none;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.1s ease;
-    }
-    
-    .accordion-header:hover {
-        background-color: #000066;
-    }
-    
-    .accordion-body {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.1s ease, padding 0.2s ease;
-        background: #f9f9f9;
-        padding: 0 15px;
-    }
-    
-    .accordion-body.open {
-        max-height: 1000px;
-        padding: 10px 15px; 
-    }
-    </style>
+<!-- Ton fichier CSS spécifique -->
+<link rel="stylesheet" href="{% static 'css/pages.css' %}">
 
 
-<div class="container mt-5" style="border: 1px solid transparent;">
+<div class="container mt-5">
 
-    
     {% if user.is_authenticated and user.is_staff %}
-
-    <div style="display: flex; align-items: center; gap: 20px;justify-content:end;">
-        <a href="{% url 'add_sous_thematique' %}"
-            style="display: flex; align-items: center; text-decoration: none;">
+    <div style="display: flex; align-items: center; justify-content: end; gap: 20px;">
+        <a href="{% url 'add_sous_thematique' %}" style="display: flex; align-items: center; text-decoration: none;">
             <ion-icon name="add-outline" style="font-size: 24px;"></ion-icon>
             <span style="margin-left: 8px;">Ajouter une sous-thématique</span>
         </a>
     </div>
-
     {% endif %}
 
-    <div class="row">
-        <ul style="list-style:none;padding:0;">
-            <li><h2>Jeux de données</h2></li>
-            <li><p>Rechercher parmi les ..... jeux de données sur <strong>opendatastream</strong></p></li>
-        </ul>
-    </div>
-
+    <!-- Titre et texte d'intro -->
     <div class="row mb-4">
-        <form id="search-form" class="form-inline w-100" action="#" style="border:1px solid transparent;padding:0;">
-            <div class="input-group w-100">
-                <input id="recherche-input" class="form-control w-100" type="search" placeholder="Recherche..." name="search">
-                <div class="input-group-append">
-                    <button style="height:100%;display:flex;align-items:center;border:none;position: absolute; top: 50%; transform: translateY(-50%); right:0px;" class="btn btn-outline-secondary" type="submit">
-                        <ion-icon name="search-sharp"></ion-icon>
+        <div class="col-md-12">
+            <ul style="list-style: none; padding: 0;">
+                <li><h2>Jeux de données</h2></li>
+                <li><p>Rechercher parmi les ..... jeux de données sur <strong>opendatastream</strong></p></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Barre de recherche parfaitement alignée -->
+    <div class="row mb-4 no-gutters">
+        <div class="col-12" style="padding-left: 0; padding-right: 0;">
+            <form class="full-width-search" action="#" method="GET">
+                <input id="recherche-input" type="search" placeholder="Recherche..." name="search">
+                <button type="submit">
+                    <ion-icon name="search-sharp"></ion-icon>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+
+    <!-- Corps principal avec sidebar + contenu -->
+    <div class="row">
+
+        <!-- Sidebar à gauche -->
+        <div class="col-md-3 sidebar" style="border: 1px solid #ccc; padding: 0;">
+
+            <div class="sidebar-accordion">
+               
+                <!--- Thématique -->
+
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        Thématiques
+                        <ion-icon class="accordion-icon" name="chevron-down-outline"></ion-icon>
                     </button>
+                    <div class="accordion-body">
+                        {% for theme in valeurs_uniques_themes %}
+                            <label><input type="checkbox" name="thematique" value="{{ theme }}"> {{ theme }}</label><br>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
 
-
-<!---------------------------------------------------------------------------------------->
-<div class="row">
-
-    <!-- Sidebar -->
-    <div class="col-md-3 sidebar" style="border: 1px solid #ccc; padding: 0;">
-        <div class="sidebar-accordion">
-
-            <!-- Accordéon Thématiques -->
-            <div class="accordion-item">
-                <button class="accordion-header">Thématiques</button>
-                <div class="accordion-body">
-                    {% for theme in valeurs_uniques_themes %}
-                        <label><input type="checkbox" name="thematique" value="{{ theme }}"> {{ theme }}</label><br>
-                    {% endfor %}
+                <!--- Périodicité -->
+                
+                <div class="accordion-item">
+                    <button class="accordion-header">
+                        Périodicité
+                        <ion-icon class="accordion-icon" name="chevron-down-outline"></ion-icon>
+                    </button>
+                    <div class="accordion-body">
+                        {% for periode in valeurs_uniques_periodicite %}
+                            <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+                
 
-            <!-- Accordéon Périodicité -->
-            <div class="accordion-item">
-                <button class="accordion-header">Périodicité</button>
-                <div class="accordion-body">
-                    {% for periode in valeurs_uniques_periodicite %}
-                        <label><input type="checkbox" name="periodicite" value="{{ periode }}"> {{ periode }}</label><br>
-                    {% endfor %}
-                </div>
             </div>
-
         </div>
-    </div>
 
-    <!-- Contenu principal -->
-    <div class="col-md-9" style="padding-right:0;">
-        <div id="subtheme-list" class="row">
-            <!-- Ton contenu dynamique ici -->
+        <!-- Zone des résultats -->
+        <div class="col-md-9" style="padding-right: 0;">
+            <div id="subtheme-list" class="row">
+                <!-- Résultats dynamiques affichés ici -->
+            </div>
         </div>
+
     </div>
 
 </div>
 
-<!---------------------------------------------------------------------------------------->
 
+<script src="{% static 'js/accordion-toggle.js' %}"></script>
 
 {% endblock content %}
 
@@ -232,20 +201,21 @@
     
         loadFilteredSubThemesFromUrl();
     
-        $('#theme-checkboxes input[type="checkbox"], #periodicite-checkboxes input[type="checkbox"], #recherche-input').on('input change', function() {
+        $('input[name="thematique"], input[name="periodicite"], #recherche-input').on('input change', function() {
             var selectedThematiques = getSelectedCheckboxValues('thematique');
             var selectedPeriodicities = getSelectedCheckboxValues('periodicite');
             var searchTerm = $('#recherche-input').val();
-    
+
             var params = {
                 'selected_thematiques': selectedThematiques,
                 'selected_periodicities': selectedPeriodicities,
                 'search': searchTerm
             };
-    
+
             updateURLParams(params);
             loadFilteredSubThemes(selectedThematiques, selectedPeriodicities, searchTerm);
         });
+
 
         window.onpopstate = function(event) {
             loadFilteredSubThemesFromUrl();
@@ -254,28 +224,5 @@
 </script>
 
 
-<!-- Accodéon sur les boutons -->
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const accordionHeaders = document.querySelectorAll('.accordion-header');
-        const accordionBodies = document.querySelectorAll('.accordion-body');
-    
-        // OUVRIR TOUS les accordéons au chargement
-        accordionBodies.forEach(body => {
-            body.classList.add('open');
-        });
-    
-        accordionHeaders.forEach(header => {
-            header.addEventListener('click', function () {
-                const body = this.nextElementSibling;
-    
-                // Toggle uniquement celui cliqué (ouvrir ou fermer)
-                body.classList.toggle('open');
-            });
-        });
-    });
-</script>
-    
 
 {% endblock script_extrat %}

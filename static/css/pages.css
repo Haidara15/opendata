@@ -1,0 +1,195 @@
+/* 1. RESET de base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+}
+
+/* 2. Container global */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* 3. Titre principal */
+h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+/* 4. Barre de recherche */
+.full-width-search {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.full-width-search input[type="search"] {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #000080;
+    border-right: none;
+    font-size: 1rem;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.full-width-search button {
+    background-color: #000080;
+    border: 2px solid #000080;
+    border-radius: 0 8px 8px 0;
+    color: white;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.full-width-search button:hover {
+    background-color: #000066;
+}
+
+/* 5. Layout principal */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Sidebar */
+.sidebar {
+    flex: 1 1 250px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* Content */
+#subtheme-list {
+    flex: 3 1 700px;
+}
+
+/* 6. Accordéon */
+.sidebar-accordion {
+    width: 100%;
+}
+
+.accordion-item {
+    width: 100%;
+    margin: 0;
+    border: none;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.accordion-header {
+    background-color: #000080;
+    color: white;
+    padding: 12px 15px;
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.accordion-header:hover {
+    background-color: #000066;
+}
+
+.accordion-icon {
+    font-size: 20px;
+}
+
+
+.accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #f9f9f9;
+    padding: 0 15px;
+}
+
+
+
+/* Accordéon labels (checkboxes) */
+.accordion-body label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+/* 7. Cartes de données */
+.card {
+    background: white;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-header {
+    background-color: #eaeaea;
+    font-weight: bold;
+    padding: 12px;
+    font-size: 1rem;
+}
+
+.card-body {
+    padding: 16px;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.95rem;
+    color: #666;
+}
+
+/* 8. Responsive */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .sidebar, 
+    #subtheme-list {
+        flex: 1 1 100%;
+    }
+
+    .full-width-search {
+        flex-direction: column;
+    }
+
+    .full-width-search button {
+        width: 100%;
+        border-radius: 0 0 8px 8px;
+        margin-top: 10px;
+    }
+
+    .full-width-search input[type="search"] {
+        border-radius: 8px 8px 0 0;
+        border-right: 2px solid #000080;
+    }
+}
